@@ -1,4 +1,5 @@
 import React, { Component, Fragment} from 'react';
+import Testcomponent from './com'
 
 class App extends Component{
   constructor(props) {
@@ -18,7 +19,7 @@ class App extends Component{
           {
             this.state.list.map((item, index) => {
               return (
-                <li key={index + item} onClick={this.onClickDelItem.bind(this, index)}>{item}</li>
+                <Testcomponent key={index + item} content={item} index={index} onClickDelItem={this.onClickDelItem.bind(this)} list={this.state.list}></Testcomponent>
               )
             })
           }
