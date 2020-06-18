@@ -1,6 +1,9 @@
 import React, { Component, Fragment} from 'react';
 import Testcomponent from './com'
-// import axios from 'axios'
+import Boss from './Boss'
+import axios from 'axios'
+import './style.css'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 class App extends Component{
   // 在某一时刻，可以自动执行的函数
@@ -17,12 +20,21 @@ class App extends Component{
   // }
 
   // 在这个生命函数中使用axios远程请求
-  // componentDidMount() {
+  componentDidMount() {
     // console.log('componentDidMount-----------组件挂载完成')
     // axios.post('https://web-api.juejin.im/v3/web/wbbr/bgeda')
     // .then((res) => {console.log('axios 获取数据成功' + JSON.stringify(res))})
     // .catch((err) => {console.log('axios 获取数据失败' + err)})
-  // }
+    axios.get('https://easy-mock.com/mock/5eeafdcbbc83131fab731d28/xixixi')
+      .then((res) => {
+        console.log('axios 获取数据成功' + JSON.stringify(res))
+        console.log(res.data.data)
+        this.setState({
+          list: res.data.data
+        })
+      })
+      .catch((err) => {console.log('axios 获取数据失败' + err)})
+  }
   // shouldComponentUpdate() {
   //   console.log('1-shouldComponentUpdate')
   //   return true
@@ -42,14 +54,25 @@ class App extends Component{
         <input value={this.state.inputValue} placeholder="add a new item" onChange={this.onChangeInput.bind(this)} ref={(input) => {this.input = input}}/>
         <button onClick={this.onClickAddItem.bind(this)}>Add Item</button>
         <ul className="my-list" ref={(ul) => {this.ul = ul}}>
-          {
-            this.state.list.map((item, index) => {
-              return (
-                <Testcomponent key={index + item} content={item} index={index} onClickDelItem={this.onClickDelItem.bind(this)} list={this.state.list}></Testcomponent>
-              )
-            })
-          }
+          <TransitionGroup>
+            {
+              this.state.list.map((item, index) => {
+                return (
+                  <CSSTransition
+                    timeout={1000}
+                    classNames="boss-text"
+                    appear={true}
+                    unmountOnExit
+                    key={index + item}
+                  >
+                    <Testcomponent content={item} index={index} onClickDelItem={this.onClickDelItem.bind(this)} list={this.state.list}></Testcomponent>
+                  </CSSTransition>
+                )
+              })
+            }
+          </TransitionGroup>
         </ul>
+        <Boss></Boss>
       </Fragment>
     )
   }
